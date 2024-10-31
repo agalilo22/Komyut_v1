@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Register TextView Click Listener
+
         tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -50,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
 
     // Mock function to simulate login success
     private fun isLoginSuccessful(email: String, password: String): Boolean {
-        // Replace with your actual login logic (e.g., API call)
-        return email == "test@example.com" && password == "password123" // Example credentials
+        return email == "test@example.com" && password == "password123"
     }
 }

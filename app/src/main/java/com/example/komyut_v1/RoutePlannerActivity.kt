@@ -56,6 +56,8 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route_planner)
 
+        showWarningDialog()
+
         // Inflate the navigation bar layout and add it to the main layout
         val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout) // Replace with your main ConstraintLayout ID
         val navBar = LayoutInflater.from(this).inflate(R.layout.nav_bar, constraintLayout, false)
@@ -77,11 +79,24 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
+
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setupModeSpinner()
         setupListViews()
         setupListeners()
+    }
+
+    private fun showWarningDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Important Reminder")
+        builder.setMessage("Routes are still not finalized. Coordinates do not have stored values yet. " +
+                "Kindly choose Route A to B (This is in Recent Locations.) for the meantime so you can proceed.")
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.create().show()
     }
 
     private fun setupModeSpinner() {

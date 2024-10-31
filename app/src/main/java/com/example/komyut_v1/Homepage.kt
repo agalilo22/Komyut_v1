@@ -2,6 +2,7 @@ package com.example.komyut_v1
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -20,13 +21,14 @@ import com.google.android.gms.maps.model.LatLng
 class HomepageActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
-    private lateinit var backButton: ImageButton // Declare back button
-    private lateinit var homeButton: ImageButton // Declare home button
+    private lateinit var backButton: ImageButton
+    private lateinit var homeButton: ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homepage)
+
 
         // Initialize navigation buttons
         backButton = findViewById(R.id.button_back)
@@ -37,7 +39,7 @@ class HomepageActivity : AppCompatActivity(), OnMapReadyCallback {
             // Start the main activity (or the appropriate home activity)
             val intent = Intent(this, MainActivity::class.java) // Update with your actual home activity
             startActivity(intent)
-            finish() // Finish this activity if you want to remove it from the back stack
+            finish() // Finish this activity if you want to removE it from the back stack
         }
 
 
@@ -57,6 +59,8 @@ class HomepageActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(Intent(this, RoutePlannerActivity::class.java))
         }
     }
+
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
