@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Komyut_v1</string>
+
+    <!-- General Route Information -->
+    <string name="start_point">Start: %1$s</string>
+    <string name="end_point">End: %1$s</string>
+    <string name="transport_mode">Transport Mode: %1$s</string>
+    <string name="travel_time">Travel Time: %1$s</string>
+    <string name="eta">ETA: %1$s</string>
+    <string name="predicted_fare">Predicted Fare: %1$s</string>
+
+    <!-- Directions Activity Buttons and Messages -->
+    <string name="feedback">Feedback</string>
+    <string name="new_route">New Route</string>
+    <string name="back">Back</string>
+    <string name="no_routes_found">No routes found.</string>
+    <string name="error_parsing_route">Error parsing route data: %1$s</string>
+    <string name="routes_json">routes.json</string>
+
+    <!-- TripActivity Specific -->
+    <string name="start_trip">Start Trip</string>
+    <string name="report_issue">Report an Issue</string>
+    <string name="provide_concern">Please provide your concern:</string>
+
+    <!-- Expandable Steps -->
+    <string name="walking">Walking</string>
+    <string name="transport">Transport</string>
+    <string name="duration">Duration: %1$s</string>
+    <string name="distance">Distance: %1$s</string>
+    <string name="instruction">Instruction: %1$s</string>
+</resources>

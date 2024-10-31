@@ -1,0 +1,107 @@
+{
+  "routes":
+  [
+    {
+      "route_name": "Route A-B",
+      "userInput": "Location A to Location B",
+      "transport_mode": "Bus",
+      "path": [
+        { "lat": 14.5995, "lng": 120.9842 },
+        { "lat": 14.6095, "lng": 120.9942 }
+      ],
+      "start": "Location A",
+      "end": "Location B",
+      "get_on": "Main Road Stop",
+      "get_off": "Location B Terminal",
+      "directions": [
+        "Start at Location A.",
+        "Proceed to the main road.",
+        "Take the bus towards Location B.",
+        "Arrive at Location B."
+      ],
+      "steps": [
+        {
+          "type": "walking",
+          "instruction": "Walk to the Main Road Stop.",
+          "duration": "7 mins",
+          "distance": "500 meters",
+          "eta": "12:10 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Board the bus at Main Road Stop.",
+          "duration": "10 mins",
+          "distance": "5 km",
+          "eta": "12:20 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Pay fare (20 PHP).",
+          "duration": "1 min",
+          "distance": "0 meters",
+          "eta": "12:21 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Get off at Location B Terminal.",
+          "duration": "2 mins",
+          "distance": "100 meters",
+          "eta": "12:23 PM"
+        }
+      ],
+      "travel_time": "12:30 PM",
+      "predicted_fare": "20 PHP"
+    },
+    {
+      "route_name": "Route Current-Location-D",
+      "userInput": "Current Location to Location D",
+      "transport_mode": "Jeepney",
+      "path": [
+        { "lat": 14.5995, "lng": 120.9842 },
+        { "lat": 14.6100, "lng": 120.9980 }
+      ],
+      "start": "Current Location",
+      "end": "Location D",
+      "get_on": "Main Road Stop",
+      "get_off": "Location D Terminal",
+      "directions": [
+        "Start at Current Location.",
+        "Proceed to the main road.",
+        "Take the jeepney towards Location D.",
+        "Arrive at Location D."
+      ],
+      "steps": [
+        {
+          "type": "walking",
+          "instruction": "Walk to the Main Road Stop.",
+          "duration": "5 mins",
+          "distance": "300 meters",
+          "eta": "12:00 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Board the jeepney at Main Road Stop.",
+          "duration": "15 mins",
+          "distance": "6 km",
+          "eta": "12:15 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Pay fare (13 PHP).",
+          "duration": "1 min",
+          "distance": "0 meters",
+          "eta": "12:16 PM"
+        },
+        {
+          "type": "transport",
+          "instruction": "Get off at Location D Terminal.",
+          "duration": "3 mins",
+          "distance": "150 meters",
+          "eta": "12:19 PM"
+        }
+      ],
+      "travel_time": "12:30 PM",
+      "predicted_fare": "13 PHP"
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordinatorLayout"
+    android:orientation="vertical"
+    android:padding="0dp">
+
+    <!-- Title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorActivatedHighlight"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back" />
+
+        <ImageButton
+            android:id="@+id/button_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Home"
+            android:src="@drawable/ic_home" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Travel Details"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:paddingBottom="8dp"
+        android:layout_marginTop="10dp"/>
+
+    <!-- CardView for Route Details -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#EFEFEF"
+        android:layout_marginBottom="16dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+            <!-- Start Point -->
+            <TextView
+                android:id="@+id/tv_start_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start: "
+                android:textSize="18sp"
+                android:paddingBottom="4dp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="16dp"/>
+
+            <!-- End Point -->
+            <TextView
+                android:id="@+id/tv_end_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End: "
+                android:textSize="18sp"
+                android:paddingBottom="4dp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="16dp"/>
+
+            <!-- Transport Mode -->
+            <TextView
+                android:id="@+id/tv_transport_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transport Mode: "
+                android:textSize="18sp"
+                android:paddingBottom="4dp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="16dp"/>
+
+            <!-- Travel Time -->
+            <TextView
+                android:id="@+id/tv_travel_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Travel Time: "
+                android:textSize="18sp"
+                android:paddingBottom="8dp"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tv_suggested_routes_title"
+        android:layout_width="179dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Suggested Routes"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/suggested_routes_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Example of a clickable route choice -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#EFEFEF"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_route_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Route Name or Description"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_route_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="Additional route details, ETA, stops, etc."
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Repeat similar MaterialCardView for each route item as needed -->
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Buttons Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <!-- Feedback Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_feedback"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Feedback"
+            app:cornerRadius="8dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/design_default_color_primary"
+            android:textColor="@android:color/white" />
+
+        <!-- New Route Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_new_route"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="New Route"
+            app:cornerRadius="8dp"
+            android:layout_marginStart="4dp"
+            android:backgroundTint="@color/design_default_color_primary"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>
