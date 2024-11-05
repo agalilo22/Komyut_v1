@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login) // Assuming activity_login.xml is your layout
+        setContentView(R.layout.activity_login)
 
         val etEmail: EditText = findViewById(R.id.et_email)
         val etPassword: EditText = findViewById(R.id.et_password)
@@ -32,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
                     // Start the next activity (MainActivity)
                     val intent = Intent(this, HomepageActivity::class.java)
                     startActivity(intent)
-                    // Remove the finish() call to keep LoginActivity alive
                 } else {
                     Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
                 }

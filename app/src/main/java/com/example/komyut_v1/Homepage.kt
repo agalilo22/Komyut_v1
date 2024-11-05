@@ -75,7 +75,7 @@ class HomepageActivity : AppCompatActivity(), OnMapReadyCallback {
                 this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
-            // Enable location if permission is granted
+
             enableMyLocation()
         }
     }

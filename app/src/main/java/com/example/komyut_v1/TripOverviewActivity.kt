@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import org.json.JSONObject
 
 class TripOverviewActivity : AppCompatActivity() {
@@ -20,7 +21,7 @@ class TripOverviewActivity : AppCompatActivity() {
     private lateinit var etaDescTextView: TextView
     private lateinit var fareTextView: TextView
     private lateinit var fareDescTextView: TextView
-    private lateinit var directionsDescTextView: TextView  // New directions description TextView
+    private lateinit var directionsDescTextView: TextView
     private lateinit var directionsLayout: LinearLayout
     private lateinit var startTripButton: Button
     private lateinit var backButton: ImageButton
@@ -47,7 +48,7 @@ class TripOverviewActivity : AppCompatActivity() {
 
         // Set up the Home button functionality
         homeButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java)) // Navigates to the home screen
+            startActivity(Intent(this, MainActivity::class.java))
             Toast.makeText(this, "Navigating to Home", Toast.LENGTH_SHORT).show()
         }
 
@@ -58,7 +59,7 @@ class TripOverviewActivity : AppCompatActivity() {
         etaDescTextView = findViewById(R.id.tv_eta_desc)
         fareTextView = findViewById(R.id.tv_fare)
         fareDescTextView = findViewById(R.id.tv_fare_desc)
-        directionsDescTextView = findViewById(R.id.tv_directions_desc)  // Initialize new directions description
+        directionsDescTextView = findViewById(R.id.tv_directions_desc)
         directionsLayout = findViewById(R.id.directions_layout)
         startTripButton = findViewById(R.id.btn_start_trip)
 
@@ -72,7 +73,7 @@ class TripOverviewActivity : AppCompatActivity() {
 
         startTripButton.setOnClickListener {
             val intent = Intent(this, TripActivity::class.java)
-            intent.putExtra("route_data", routeData)  // Pass route data to TripActivity
+            intent.putExtra("route_data", routeData)
             startActivity(intent)
         }
 
@@ -91,19 +92,44 @@ class TripOverviewActivity : AppCompatActivity() {
         fareTextView.text = route.getString("predicted_fare")
         fareDescTextView.text = "Total fare for the selected trip."
 
-        // Set directions description
-        directionsDescTextView.text = "Directions for your trip:"
+
+        // Display route name, get on and get off information
+        val routeName = route.getString("route_name")
+        val getOn = route.getString("get_on")
+        val getOff = route.getString("get_off")
+
+        // Create a header for the route details
+        val routeHeader = TextView(this).apply {
+            text = "Route: $routeName"
+            textSize = 20f
+            setPadding(16, 16, 16, 8) // Add padding
+            setTextColor(ContextCompat.getColor(context, android.R.color.black))
+        }
+
+        val getOnOffInfo = TextView(this).apply {
+            text = "Get On: $getOn\nGet Off: $getOff"
+            textSize = 16f
+            setPadding(16, 0, 16, 8) // Add padding
+            setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+        }
+
+        // Add route header and get on/off information to the directions layout
+        directionsLayout.addView(routeHeader)
+        directionsLayout.addView(getOnOffInfo)
 
         // Populate directions layout
         val directionsArray = route.getJSONArray("directions")
         for (i in 0 until directionsArray.length()) {
             val directionView = TextView(this).apply {
                 text = directionsArray.getString(i)
-                setPadding(8, 8, 8, 8)
+                textSize = 14f // Set a consistent text size for directions
+                setPadding(16, 8, 16, 8) // Add padding around each direction
+                setBackgroundResource(R.drawable.direction_background)
             }
             directionsLayout.addView(directionView)
         }
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

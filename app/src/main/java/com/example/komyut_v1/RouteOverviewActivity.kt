@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import org.json.JSONObject
 
+
 class RouteOverviewActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var routeDetailsTextView: TextView
@@ -96,10 +97,9 @@ class RouteOverviewActivity : AppCompatActivity(), OnMapReadyCallback {
             val jsonObject = JSONObject(jsonString)
             val routesArray = jsonObject.getJSONArray("routes")
 
-            // Assuming you have logic to identify the selected route.
-            // For demonstration, we will just pick the first route.
+
             if (routesArray.length() > 0) {
-                val route = routesArray.getJSONObject(0) // Change index based on your selection logic
+                val route = routesArray.getJSONObject(0)
 
                 // Set start and end points
                 val start = route.getString("start")
@@ -115,7 +115,7 @@ class RouteOverviewActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 directionsTextView.text = directionsList.toString()
 
-                // Parse the path without displaying transport mode and travel time
+
                 val pathArray = route.getJSONArray("path")
                 val path = mutableListOf<LatLng>()
                 for (j in 0 until pathArray.length()) {

@@ -131,11 +131,7 @@ android:background="@android:color/white">
     android:id="@+id/tv_directions_desc"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Directions for your trip:"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    android:textColor="@android:color/black"
-    android:paddingBottom="8dp"/>
+    android:paddingBottom="1dp"/>
 
 <!-- Directions Layout -->
 <LinearLayout

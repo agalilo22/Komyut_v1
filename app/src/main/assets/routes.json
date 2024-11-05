@@ -5,6 +5,7 @@
       "route_name": "Route A-B",
       "userInput": "Location A to Location B",
       "transport_mode": "Bus",
+      "vehicle_icon": "bus_icon",
       "path": [
         { "lat": 14.5995, "lng": 120.9842 },
         { "lat": 14.6095, "lng": 120.9942 }
@@ -35,14 +36,14 @@
           "eta": "12:20 PM"
         },
         {
-          "type": "transport",
+          "type": "payment",
           "instruction": "Pay fare (20 PHP).",
           "duration": "1 min",
           "distance": "0 meters",
           "eta": "12:21 PM"
         },
         {
-          "type": "transport",
+          "type": "arrival",
           "instruction": "Get off at Location B Terminal.",
           "duration": "2 mins",
           "distance": "100 meters",
@@ -53,15 +54,16 @@
       "predicted_fare": "20 PHP"
     },
     {
-      "route_name": "Route Current-Location-D",
-      "userInput": "Current Location to Location D",
+      "route_name": "Route A-B",
+      "userInput": "Location A to Location B",
       "transport_mode": "Jeepney",
+      "vehicle_icon": "jeep_icon",
       "path": [
         { "lat": 14.5995, "lng": 120.9842 },
         { "lat": 14.6100, "lng": 120.9980 }
       ],
-      "start": "Current Location",
-      "end": "Location D",
+      "start": "Location A",
+      "end": "Location B",
       "get_on": "Main Road Stop",
       "get_off": "Location D Terminal",
       "directions": [
@@ -86,14 +88,14 @@
           "eta": "12:15 PM"
         },
         {
-          "type": "transport",
+          "type": "payment",
           "instruction": "Pay fare (13 PHP).",
           "duration": "1 min",
           "distance": "0 meters",
           "eta": "12:16 PM"
         },
         {
-          "type": "transport",
+          "type": "arrival",
           "instruction": "Get off at Location D Terminal.",
           "duration": "3 mins",
           "distance": "150 meters",

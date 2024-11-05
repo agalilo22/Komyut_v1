@@ -10,6 +10,7 @@
     android:padding="0dp">
 
     <!-- Title -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Travel Details"
+        android:text="  "
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
@@ -57,35 +58,64 @@
         app:cardBackgroundColor="#EFEFEF"
         android:layout_marginBottom="16dp">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <!-- Start Point -->
-            <TextView
-                android:id="@+id/tv_start_point"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start: "
-                android:textSize="18sp"
-                android:paddingBottom="4dp"
-                android:textColor="@android:color/black"
-                android:layout_marginLeft="16dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/icon_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/gps_fixed"
+                    android:contentDescription="Start Icon"
+                    android:layout_marginEnd="8dp" /> <!-- Space between icon and text -->
+
+                <TextView
+                    android:id="@+id/tv_start_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  "
+                    android:textSize="18sp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginLeft="0dp"/>
+            </LinearLayout>
 
             <!-- End Point -->
-            <TextView
-                android:id="@+id/tv_end_point"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="End: "
-                android:textSize="18sp"
-                android:paddingBottom="4dp"
-                android:textColor="@android:color/black"
-                android:layout_marginLeft="16dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"> <!-- Add some margin for spacing -->
+
+                <ImageView
+                    android:id="@+id/icon_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pin_alt"
+                    android:contentDescription="End Icon"
+                    android:layout_marginEnd="8dp" /> <!-- Space between icon and text -->
+
+                <TextView
+                    android:id="@+id/tv_end_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  "
+                    android:textSize="18sp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginLeft="0dp"/>
+            </LinearLayout>
 
             <!-- Transport Mode -->
             <TextView
@@ -133,78 +163,113 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Example of a clickable route choice -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#EFEFEF"
+                app:cardBackgroundColor="#D0E1F9"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_route_name"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:text="Route Name or Description"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:layout_weight="1" />
 
-                    <TextView
-                        android:id="@+id/tv_route_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Route Name or Description"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/tv_route_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:text="ETA, stops, etc."
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/tv_route_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="4dp"
-                        android:text="Additional route details, ETA, stops, etc."
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <!-- Repeat similar MaterialCardView for each route item as needed -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#E8F5E9"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_route_name_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Another Route Name or Description"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_route_details_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:text="ETA, stops, etc."
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>
     </ScrollView>
 
     <!-- Buttons Layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:gravity="center"
+android:layout_marginTop="16dp">
 
-        <!-- Feedback Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_feedback"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Feedback"
-            app:cornerRadius="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/design_default_color_primary"
-            android:textColor="@android:color/white" />
+<!-- Feedback Button -->
+<com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_feedback"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Feedback"
+    app:cornerRadius="8dp"
+    android:layout_marginEnd="4dp"
+    android:backgroundTint="@color/design_default_color_primary"
+    android:textColor="@android:color/white" />
 
-        <!-- New Route Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_new_route"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="New Route"
-            app:cornerRadius="8dp"
-            android:layout_marginStart="4dp"
-            android:backgroundTint="@color/design_default_color_primary"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+<!-- New Route Button -->
+<com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_new_route"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="New Route"
+    app:cornerRadius="8dp"
+    android:layout_marginStart="4dp"
+    android:backgroundTint="@color/design_default_color_primary"
+    android:textColor="@android:color/white" />
 </LinearLayout>
+    </LinearLayout>

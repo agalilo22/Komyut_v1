@@ -41,7 +41,8 @@ android:background="@android:color/white">
         android:orientation="vertical"
         android:paddingTop="8dp" />
 
-    <!-- Report an Issue Button -->
+
+    <!-- Report an Issue Button with Feedback Icon -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_report_issue"
         android:layout_width="match_parent"
@@ -51,7 +52,10 @@ android:background="@android:color/white">
         android:backgroundTint="@color/primaryDark"
         android:textColor="@android:color/white"
         app:cornerRadius="16dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        app:icon="@drawable/warning"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp" />
 
 </LinearLayout>
 </ScrollView>

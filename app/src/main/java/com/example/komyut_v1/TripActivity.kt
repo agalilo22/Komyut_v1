@@ -28,7 +28,6 @@ class TripActivity : AppCompatActivity() {
         tripStepsLayout = findViewById(R.id.trip_steps_layout)
         reportIssueButton = findViewById(R.id.btn_report_issue)
 
-
         // Inflate the navigation bar layout and add it to the main layout
         val coordinatorLayout = findViewById<CoordinatorLayout>(R.id.coordinatorLayout)
         val navBar = LayoutInflater.from(this).inflate(R.layout.nav_bar, coordinatorLayout, false)
@@ -57,86 +56,87 @@ class TripActivity : AppCompatActivity() {
             showToast("No trip details available.")
         }
 
-        // Set Report Issue button listener
-        reportIssueButton.setOnClickListener {
-            showReportIssueDialog()
+        // Set Report Issue button listener and add icon
+        reportIssueButton.apply {
+            text = "Report an Issue"
+            setOnClickListener { showReportIssueDialog() }
         }
     }
 
     private fun displaySteps(route: JSONObject) {
         val stepsArray = route.getJSONArray("steps")
-        segregateStepsByType(stepsArray)
+        addStepsToLayout(stepsArray)
     }
 
-    private fun segregateStepsByType(stepsArray: JSONArray) {
-        val walkingSteps = JSONArray()
-        val transportSteps = JSONArray()
-
+    private fun addStepsToLayout(stepsArray: JSONArray) {
         for (i in 0 until stepsArray.length()) {
             val step = stepsArray.getJSONObject(i)
-            if (step.getString("type") == "walking") {
-                walkingSteps.put(step)
-            } else {
-                transportSteps.put(step)
-            }
-        }
-
-        addExpandableSection("Walking Steps", walkingSteps)
-        addExpandableSection("Transport Steps", transportSteps)
-    }
-
-    private fun addExpandableSection(title: String, steps: JSONArray) {
-        val sectionLayout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16)
-        }
-
-        val titleTextView = TextView(this).apply {
-            text = title
-            textSize = 18f
-            setPadding(8, 8, 8, 8)
-            setTypeface(null, android.graphics.Typeface.BOLD) // Set bold style here
-        }
-
-        val toggleButton = Button(this).apply {
-            text = "Show"
-            setOnClickListener {
-                sectionLayout.visibility = if (sectionLayout.visibility == LinearLayout.GONE) {
-                    text = "Hide"
-                    LinearLayout.VISIBLE
-                } else {
-                    text = "Show"
-                    LinearLayout.GONE
-                }
-            }
-        }
-
-        tripStepsLayout.addView(titleTextView)
-        tripStepsLayout.addView(toggleButton)
-        tripStepsLayout.addView(sectionLayout)
-
-        sectionLayout.visibility = LinearLayout.GONE
-
-        for (i in 0 until steps.length()) {
             val stepView = CardView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 setCardBackgroundColor(resources.getColor(android.R.color.white))
-                radius = 8f
-                cardElevation = 4f
+                radius = 12f
+                cardElevation = 8f
+                setPadding(16)
 
-                val instructionTextView = TextView(this@TripActivity).apply {
-                    text = steps.getJSONObject(i).getString("instruction")
-                    setPadding(16, 16, 16, 16)
-                    textSize = 16f
-                    setTextColor(resources.getColor(android.R.color.black))
+                // Horizontal LinearLayout to hold icon and instruction text
+                val stepLayout = LinearLayout(this@TripActivity).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    setPadding(16)
                 }
 
-                addView(instructionTextView)
+                // Add Icon beside the instruction text
+                val icon = ImageView(this@TripActivity).apply {
+                    val iconResId = getIconResource(step.getString("type"))
+                    setImageResource(iconResId)
+                    layoutParams = LinearLayout.LayoutParams(100, 100) // Larger icon size
+                    setPadding(0, 0, 16, 0) // Padding to the right of the icon
+                }
+
+                // Instruction TextView
+                val instructionTextView = TextView(this@TripActivity).apply {
+                    text = step.getString("instruction")
+                    textSize = 18f
+                    setTextColor(resources.getColor(android.R.color.black))
+                    setTypeface(null, android.graphics.Typeface.BOLD)
+                }
+
+                // Vertical layout to stack instruction and details
+                val instructionLayout = LinearLayout(this@TripActivity).apply {
+                    orientation = LinearLayout.VERTICAL
+                }
+
+                // Duration and Distance TextView below instruction
+                val detailsTextView = TextView(this@TripActivity).apply {
+                    text = "Duration: ${step.getString("duration")}, Distance: ${step.getString("distance")}"
+                    textSize = 14f
+                    setTextColor(resources.getColor(android.R.color.darker_gray))
+                }
+
+                // Add instruction and details to the vertical layout
+                instructionLayout.addView(instructionTextView)
+                instructionLayout.addView(detailsTextView)
+
+
+                stepLayout.addView(icon)
+                stepLayout.addView(instructionLayout)
+
+
+                addView(stepLayout)
             }
-            sectionLayout.addView(stepView)
+            tripStepsLayout.addView(stepView)
+        }
+    }
+
+    private fun getIconResource(type: String): Int {
+        return when (type) {
+            "walking" -> R.drawable.walking_icon
+            "payment" -> R.drawable.payment_icon
+            "arrival" -> R.drawable.move_icon
+            "transport" -> R.drawable.bus_icon
+            else -> R.drawable.warning
         }
     }
 
@@ -144,6 +144,7 @@ class TripActivity : AppCompatActivity() {
         val input = EditText(this).apply {
             hint = "Describe your issue"
             inputType = InputType.TYPE_CLASS_TEXT
+            setPadding(16)
         }
 
         AlertDialog.Builder(this)

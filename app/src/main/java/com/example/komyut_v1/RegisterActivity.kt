@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register) // Ensure this matches your layout name
+        setContentView(R.layout.activity_register)
 
         // Find the "Already have an account?" TextView
         val tvLogin: TextView = findViewById(R.id.tv_login)

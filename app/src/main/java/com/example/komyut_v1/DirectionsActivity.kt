@@ -2,6 +2,7 @@ package com.example.komyut_v1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -23,8 +24,8 @@ class DirectionsActivity : AppCompatActivity() {
     private lateinit var newRouteButton: Button
     private lateinit var suggestedRoutesLayout: LinearLayout
     private lateinit var suggestedRoutesTitleTextView: TextView
-    private lateinit var backButton: ImageButton // Declare back button
-    private lateinit var homeButton: ImageButton // Declare home button
+    private lateinit var backButton: ImageButton
+    private lateinit var homeButton: ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +48,8 @@ class DirectionsActivity : AppCompatActivity() {
 
         backButton.setOnClickListener { onBackPressed() } // Go back to the previous activity
         homeButton.setOnClickListener {
-            // Start the main activity (or the appropriate home activity)
-            val intent = Intent(this, MainActivity::class.java) // Update with your actual home activity
+
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish() // Finish this activity if you want to remove it from the back stack
         }
@@ -57,6 +58,8 @@ class DirectionsActivity : AppCompatActivity() {
         val routeJsonString = intent.getStringExtra("route_json")
         val startLocation = intent.getStringExtra("start_location") ?: "Unknown"
         val endLocation = intent.getStringExtra("end_location") ?: "Unknown"
+
+
 
         // Display start and end locations
         startPointTextView.text = getString(R.string.start_point, startLocation)
@@ -99,13 +102,22 @@ class DirectionsActivity : AppCompatActivity() {
         }
     }
 
+    // Create ImageView for the icon
+
     private fun addSuggestedRoutes(routesArray: JSONArray) {
-        suggestedRoutesLayout.removeAllViews()
+        suggestedRoutesLayout.removeAllViews() // Clear previous views
 
         for (i in 0 until routesArray.length()) {
-            val route = routesArray.getJSONObject(i)
-            val routeName = route.getString("transport_mode")
-            val routeDetails = "ETA: ${route.getString("travel_time")}, Fare: ${route.getString("predicted_fare")}"
+            val route = routesArray.getJSONObject(i) // Get the current route JSON object
+
+            // Ensure required properties exist before accessing
+            val routeName = route.optString("transport_mode", "Unknown mode")
+            val travelTime = route.optString("travel_time", "Unknown time")
+            val predictedFare = route.optString("predicted_fare", "Unknown fare")
+            val iconName = route.optString("vehicle_icon", "default_icon") // Get the icon name from JSON
+
+            // Prepare details string
+            val routeDetails = "ETA: $travelTime, Fare: $predictedFare"
 
             // Create MaterialCardView
             val cardView = MaterialCardView(this).apply {
@@ -117,25 +129,50 @@ class DirectionsActivity : AppCompatActivity() {
                 }
                 isClickable = true
                 isFocusable = true
-                foreground = ContextCompat.getDrawable(context, R.drawable.selectable_item_background) // Use a valid drawable resource
+                foreground = ContextCompat.getDrawable(context, R.drawable.selectable_item_background)
                 setCardBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
                 cardElevation = 4f
                 radius = 8f
             }
 
-            // Create inner LinearLayout for content
+            // Create inner LinearLayout for the entire content
             val innerLayout = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
+                orientation = LinearLayout.VERTICAL // Vertical layout for outer container
                 setPadding(16, 16, 16, 16)
             }
 
-            // Create TextViews for route name and details
+            // Create horizontal layout for the icon and transport mode
+            val horizontalLayout = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL // Horizontal layout for icon and transport mode
+                setPadding(0, 0, 0, 8) // Padding to separate from details
+            }
+
+            // Create ImageView for the icon
+            val ivRouteIcon = ImageView(this).apply {
+                // Use the correct variable to get the icon name from the JSON object
+                val iconResId = resources.getIdentifier(iconName, "drawable", packageName)
+                setImageResource(iconResId) // Set the icon image
+                layoutParams = LinearLayout.LayoutParams(150, 150) //
+                setPadding(0, 0, 16, 0)
+            }
+
+            // Create TextView for route name (transport mode)
             val tvRouteName = TextView(this).apply {
                 text = routeName
                 textSize = 18f
                 setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    ivRouteIcon.layoutParams.height // Match the icon height
+                )
+                gravity = Gravity.CENTER_VERTICAL // Center vertically within the layout
             }
 
+            // Add ImageView and TextView to horizontal layout
+            horizontalLayout.addView(ivRouteIcon)
+            horizontalLayout.addView(tvRouteName)
+
+            // Create TextView for route details (ETA and Fare)
             val tvRouteDetails = TextView(this).apply {
                 text = routeDetails
                 textSize = 14f
@@ -143,10 +180,9 @@ class DirectionsActivity : AppCompatActivity() {
                 setPadding(0, 4, 0, 0) // Padding top
             }
 
-            // Add TextViews to inner layout
-            innerLayout.addView(tvRouteName)
-            innerLayout.addView(tvRouteDetails)
-
+            // Add horizontal layout and details TextView to the inner layout
+            innerLayout.addView(horizontalLayout) // Add horizontal layout first
+            innerLayout.addView(tvRouteDetails) // Then add the details
 
             // Add inner layout to card view
             cardView.addView(innerLayout)
@@ -161,6 +197,11 @@ class DirectionsActivity : AppCompatActivity() {
                 intent.putExtra("route_data", route.toString())
                 startActivity(intent)
             }
+        }
+
+        // If no routes were added, show a message
+        if (routesArray.length() == 0) {
+            showToast("No routes available.")
         }
     }
 

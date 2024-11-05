@@ -11,6 +11,8 @@ import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -41,9 +43,10 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
     private val routeDetailsTextView by lazy { findViewById<TextView>(R.id.tvRouteDetails) }
     private val btnEnter by lazy { findViewById<Button>(R.id.btn_enter) }
     private val btnRouteOverview by lazy { findViewById<Button>(R.id.btn_route_overview) }
-    private val radioGroupSetPoint by lazy { findViewById<RadioGroup>(R.id.rg_set_point) }
     private val btnChooseFromMap by lazy { findViewById<Button>(R.id.btn_choose_from_map) }
     private val btnCurrentLocation by lazy { findViewById<Button>(R.id.btn_current_location) }
+    private var selectedPointType: String? = null
+    private lateinit var mapPickerLauncher: ActivityResultLauncher<Intent>
 
     private val recentLocations = listOf("Location A", "Location B", "Location C", "Location D")
     private val savedPlaces = listOf("Home", "Work", "Gym")
@@ -58,8 +61,27 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
 
         showWarningDialog()
 
+
+        // Initialize ActivityResultLauncher for map picker
+        mapPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedLocation = result.data?.getStringExtra("location") ?: ""
+                when (selectedPointType) {
+                    "Set as Start Point" -> startLocationEditText.setText(selectedLocation)
+                    "Set as End Point" -> destinationEditText.setText(selectedLocation)
+                    else -> Toast.makeText(this, "Unknown point type selected.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        // Set up listeners
+        btnChooseFromMap.setOnClickListener { showChoosePointDialog() }
+    }
+
+
+
         // Inflate the navigation bar layout and add it to the main layout
-        val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout) // Replace with your main ConstraintLayout ID
+        val constraintLayout =
+            findViewById<ConstraintLayout>(R.id.constraintLayout) // Replace with your main ConstraintLayout ID
         val navBar = LayoutInflater.from(this).inflate(R.layout.nav_bar, constraintLayout, false)
         constraintLayout.addView(navBar)
 
@@ -91,8 +113,10 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun showWarningDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Important Reminder")
-        builder.setMessage("Routes are still not finalized. Coordinates do not have stored values yet. " +
-                "Kindly choose Route A to B (This is in Recent Locations.) for the meantime so you can proceed.")
+        builder.setMessage(
+            "Routes are still not finalized. Coordinates do not have stored values yet. " +
+                    "Kindly choose Route A to B (This is in Recent Locations.) for the meantime so you can proceed."
+        )
         builder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
         }
@@ -135,9 +159,83 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
         btnRouteOverview.setOnClickListener { launchRouteOverview() }
 
         btnChooseFromMap.setOnClickListener {
-            val intent = Intent(this, MapPickerActivity::class.java)
-            startActivityForResult(intent, mapPickerRequest)
+            showChoosePointDialog()
         }
+
+        btnCurrentLocation.setOnClickListener {
+            // Existing code for handling current location
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Request permission if not granted
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    locationPermissionRequestCode
+                )
+            } else {
+                // Permission already granted, get current location
+                getCurrentLocation()
+            }
+        }
+    }
+
+    private fun showChoosePointDialog() {
+        val options = arrayOf("Set as Start Point", "Set as End Point")
+        var selectedOption = -1
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose Point Type")
+        builder.setSingleChoiceItems(options, -1) { _, which -> selectedOption = which }
+        builder.setPositiveButton("OK") { dialog, _ ->
+            if (selectedOption != -1) {
+                selectedPointType = options[selectedOption]
+
+                // Launch MapPickerActivity with the selected point type
+                val intent = Intent(this, MapPickerActivity::class.java).apply {
+                    putExtra("point_type", selectedPointType)
+                }
+                mapPickerLauncher.launch(intent)
+            } else {
+                Toast.makeText(this, "Please select an option.", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        builder.create().show()
+
+    btnRouteOverview.setOnClickListener { launchRouteOverview() }
+
+        btnChooseFromMap.setOnClickListener {
+            // Define the options
+            val options = arrayOf("Set as Start Point", "Set as End Point")
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Choose an Option")
+            builder.setSingleChoiceItems(options, -1) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        // Set as Start Point selected
+                        val intent = Intent(this, MapPickerActivity::class.java)
+                        startActivityForResult(intent, mapPickerRequest)
+                        // Store this selection if needed for later
+                    }
+                    1 -> {
+                        // Set as End Point selected
+                        val intent = Intent(this, MapPickerActivity::class.java)
+                        startActivityForResult(intent, mapPickerRequest)
+                        // Store this selection if needed for later
+                    }
+                }
+                dialog.dismiss() // Close the dialog after selection
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.create().show() // Show the radio dialog
+        }
+
 
         btnCurrentLocation.setOnClickListener {
             // Check for location permission
@@ -177,9 +275,6 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
             if (location != null) {
                 val currentLatLng = LatLng(location.latitude, location.longitude)
                 showSetLocationDialog(currentLatLng)
-                // Only move the camera if needed; comment out if not required
-                // map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
-                // map.addMarker(MarkerOptions().position(currentLatLng).title("You are here"))
             } else {
                 showToast("Unable to get current location")
             }
@@ -217,11 +312,16 @@ class RoutePlannerActivity : AppCompatActivity(), OnMapReadyCallback {
         if (requestCode == mapPickerRequest && resultCode == RESULT_OK) {
             val selectedLocation = data?.getStringExtra("location") ?: ""
 
-            // Use RadioGroup to determine where to set the location
-            if (findViewById<RadioButton>(R.id.rb_set_start).isChecked) {
-                startLocationEditText.setText(selectedLocation)
-            } else if (findViewById<RadioButton>(R.id.rb_set_end).isChecked) {
-                destinationEditText.setText(selectedLocation)
+            when (selectedPointType) {
+                "Set as Start Point" -> {
+                    startLocationEditText.setText(selectedLocation)
+                }
+                "Set as End Point" -> {
+                    destinationEditText.setText(selectedLocation)
+                }
+                else -> {
+                    Toast.makeText(this, "Unknown point type selected.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
